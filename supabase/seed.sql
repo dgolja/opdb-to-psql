@@ -1,0 +1,206 @@
+BEGIN;
+
+TRUNCATE TABLE opdb_people, people, opdb_images, images, image_variants,
+    features, opdb_features, opdb, manufacturers
+    RESTART IDENTITY CASCADE;
+
+INSERT INTO manufacturers (manufacturer_id, name, full_name) VALUES
+    (8, 'Bally','Bally Manufacturing Co.'),
+    (12, 'Stern','Stern Pinball, Inc.'),
+    (24, 'Genco','Genco Manufacturing Co.'),
+    (74, 'Jersey Jack Pinball', 'Jersey Jack Pinball');
+
+INSERT INTO features (feature_id, name, group_name) VALUES
+    (4, 'Pro edition', 'edition'),
+    (5, 'Premium edition', 'edition');
+
+INSERT INTO people (opdb_person_id, name) VALUES
+    (137, 'George Gomez'),
+    (139, 'Tom Kopera'),
+    (141, 'Bill Grupp'),
+    (204, 'David Thiel'),
+    (282, 'Dean Grover'),
+    (317, 'Duncan Brown'),
+    (344, 'Jean-Paul de Win'),
+    (365, 'Chuck Ernst'),
+    (370, 'Joe Katz'),
+    (372, 'Eric Meunier'),
+    (374, 'Jerry Thompson'),
+    (386, 'Jeremy Packer'),
+    (393, 'Christopher Franchi'),
+    (431, 'Keith Elwin'),
+    (432, 'Harrison Drake'),
+    (433, 'Rick Naegele'),
+    (434, 'Iron Maiden'),
+    (444, 'Eric Drucker'),
+    (445, 'The Beatles'),
+    (490, 'Dan Lachcik'),
+    (491, 'Jason Allen'),
+    (492, 'Taylor Snyder'),
+    (493, 'Nick Jensen'),
+    (494, 'Pierce Colbert'),
+    (495, 'Olaf Gremie'),
+    (496, 'Johnny Wiegel');
+
+INSERT INTO images (group_id, title, is_primary, type) VALUES
+    ('d71148a2-23cf-4460-bf04-2e00a14b3e63', null, true, 'backglass'),
+    ('489b9d99-7ee9-46d4-ab71-784202206c74', null, true, 'playfield'),
+    ('b7f4e01d-c1b2-4991-b867-3b2821dc228b', null, true, 'backglass'),
+    ('e03b8851-4cb2-4614-b41f-a0698eaad3bb', null, true, 'backglass'),
+    ('f6ddfff7-07b1-4914-989c-233c583f08e3', null, true, 'backglass'),
+    ('a6b3c681-ef0d-4d14-91d4-6acfdd32d8e5', null, true, 'playfield'),
+    ('9889cd2f-d390-41c7-a9ed-f13bd193a503', null, true, 'cabinet'),
+    ('b0933b67-3189-42fc-9ceb-13a69f45a3b4', null, true, 'backglass'),
+    ('1d47935c-a231-4f43-910f-7951e147dcac', null, true, 'playfield'),
+    ('419d4600-a6bf-43c8-9e5a-d245ef0355ca', null, true, 'cabinet'),
+    ('88402c82-c875-4a7a-bc54-5087fa577ab6', null, true, 'backglass'),
+    ('e4c02a1b-b49c-4370-88e1-c94ab0774dec', null, true, 'playfield');
+
+INSERT INTO image_variants (group_id, variant, url, width, height) VALUES
+    ('d71148a2-23cf-4460-bf04-2e00a14b3e63', 'medium', 'https://img.opdb.org/d71148a2-23cf-4460-bf04-2e00a14b3e63-medium.jpg', 640, 407),
+    ('d71148a2-23cf-4460-bf04-2e00a14b3e63', 'large', 'https://img.opdb.org/d71148a2-23cf-4460-bf04-2e00a14b3e63-large.jpg', 972, 618),
+    ('d71148a2-23cf-4460-bf04-2e00a14b3e63', 'small', 'https://img.opdb.org/d71148a2-23cf-4460-bf04-2e00a14b3e63-small.jpg', 250, 159),
+    ('489b9d99-7ee9-46d4-ab71-784202206c74', 'medium', 'https://img.opdb.org/489b9d99-7ee9-46d4-ab71-784202206c74-medium.jpg', 635, 640),
+    ('489b9d99-7ee9-46d4-ab71-784202206c74', 'large', 'https://img.opdb.org/489b9d99-7ee9-46d4-ab71-784202206c74-large.jpg', 864, 871),
+    ('489b9d99-7ee9-46d4-ab71-784202206c74', 'small', 'https://img.opdb.org/489b9d99-7ee9-46d4-ab71-784202206c74-small.jpg', 248, 250),
+    ('b7f4e01d-c1b2-4991-b867-3b2821dc228b', 'medium', 'https://img.opdb.org/b7f4e01d-c1b2-4991-b867-3b2821dc228b-medium.jpg', 568, 640),
+    ('b7f4e01d-c1b2-4991-b867-3b2821dc228b', 'large', 'https://img.opdb.org/b7f4e01d-c1b2-4991-b867-3b2821dc228b-large.jpg', 652, 735),
+    ('b7f4e01d-c1b2-4991-b867-3b2821dc228b', 'small', 'https://img.opdb.org/b7f4e01d-c1b2-4991-b867-3b2821dc228b-small.jpg', 222, 250),
+    ('e03b8851-4cb2-4614-b41f-a0698eaad3bb', 'medium', 'https://img.opdb.org/e03b8851-4cb2-4614-b41f-a0698eaad3bb-medium.jpg', 640, 581),
+    ('e03b8851-4cb2-4614-b41f-a0698eaad3bb', 'large', 'https://img.opdb.org/e03b8851-4cb2-4614-b41f-a0698eaad3bb-large.jpg', 1200, 1089),
+    ('e03b8851-4cb2-4614-b41f-a0698eaad3bb', 'small', 'https://img.opdb.org/e03b8851-4cb2-4614-b41f-a0698eaad3bb-small.jpg', 250, 227),
+    ('f6ddfff7-07b1-4914-989c-233c583f08e3', 'medium', 'https://img.opdb.org/f6ddfff7-07b1-4914-989c-233c583f08e3-medium.jpg', 640, 581),
+    ('f6ddfff7-07b1-4914-989c-233c583f08e3', 'large', 'https://img.opdb.org/f6ddfff7-07b1-4914-989c-233c583f08e3-large.jpg', 1200, 1089),
+    ('f6ddfff7-07b1-4914-989c-233c583f08e3', 'small', 'https://img.opdb.org/f6ddfff7-07b1-4914-989c-233c583f08e3-small.jpg', 250, 227),
+    ('b0933b67-3189-42fc-9ceb-13a69f45a3b4', 'medium', 'https://img.opdb.org/b0933b67-3189-42fc-9ceb-13a69f45a3b4-medium.jpg',640, 581),
+    ('b0933b67-3189-42fc-9ceb-13a69f45a3b4', 'large', 'https://img.opdb.org/b0933b67-3189-42fc-9ceb-13a69f45a3b4-large.jpg', 1200, 1089),
+    ('b0933b67-3189-42fc-9ceb-13a69f45a3b4', 'small', 'https://img.opdb.org/b0933b67-3189-42fc-9ceb-13a69f45a3b4-small.jpg', 250 , 227),
+    ('1d47935c-a231-4f43-910f-7951e147dcac','medium', 'https://img.opdb.org/1d47935c-a231-4f43-910f-7951e147dcac-medium.jpg',574, 640),
+    ('1d47935c-a231-4f43-910f-7951e147dcac','large', 'https://img.opdb.org/1d47935c-a231-4f43-910f-7951e147dcac-large.jpg', 1008, 1124),
+    ('1d47935c-a231-4f43-910f-7951e147dcac','small', 'https://img.opdb.org/1d47935c-a231-4f43-910f-7951e147dcac-small.jpg', 224, 250),
+    ('419d4600-a6bf-43c8-9e5a-d245ef0355ca', 'medium', 'https://img.opdb.org/419d4600-a6bf-43c8-9e5a-d245ef0355ca-medium.jpg', 423, 640),
+    ('419d4600-a6bf-43c8-9e5a-d245ef0355ca', 'large', 'https://img.opdb.org/419d4600-a6bf-43c8-9e5a-d245ef0355ca-large.jpg', 991, 1500),
+    ('419d4600-a6bf-43c8-9e5a-d245ef0355ca', 'small', 'https://img.opdb.org/419d4600-a6bf-43c8-9e5a-d245ef0355ca-small.jpg', 165, 250),
+    ('88402c82-c875-4a7a-bc54-5087fa577ab6', 'medium','https://img.opdb.org/88402c82-c875-4a7a-bc54-5087fa577ab6-medium.jpg', 640, 371),
+    ('88402c82-c875-4a7a-bc54-5087fa577ab6', 'large', 'https://img.opdb.org/88402c82-c875-4a7a-bc54-5087fa577ab6-large.jpg', 1500, 870),
+    ('88402c82-c875-4a7a-bc54-5087fa577ab6', 'small', 'https://img.opdb.org/88402c82-c875-4a7a-bc54-5087fa577ab6-small.jpg', 250, 145),
+    ('e4c02a1b-b49c-4370-88e1-c94ab0774dec', 'medium', 'https://img.opdb.org/e4c02a1b-b49c-4370-88e1-c94ab0774dec-medium.jpg', 409, 640),
+    ('e4c02a1b-b49c-4370-88e1-c94ab0774dec', 'large','https://img.opdb.org/e4c02a1b-b49c-4370-88e1-c94ab0774dec-large.jpg', 959, 1500),
+    ('e4c02a1b-b49c-4370-88e1-c94ab0774dec', 'small','https://img.opdb.org/e4c02a1b-b49c-4370-88e1-c94ab0774dec-small.jpg', 160, 250);
+
+INSERT INTO opdb (opdb_id, opdb_group, opdb_machine, name, short_name, common_name,
+    name_sort, year, manufacture_date, description, type, display, player_count,
+    physical_machine, manufacturer_id, ipdb_id, pinball_primer_url, pinball_rules_url,
+    pinball_cards_url, bobs_guide_url, competition_setup_url, competition_notes_url,
+    has_competition_notes, has_competition_setup, created_at, updated_at, entry_type) VALUES
+    ('G0l8P-M85d9', 'G0l8P', 'G0l8P-M85d9', 'The Beatles (Gold)', null, null, 'Beatles (Gold), The', 2018, '2018-11-01', '', 'ss', 'lcd', 4, true, 12, 6561, null, 'https://pinballrulesheets.com/stern/stern-the-beatles-rulesheet', null, null, 'https://raw.githubusercontent.com/coreyhulse/pinball_tournament_machine_notes/refs/heads/main/machines/Beatles_cs_1463_G0l8P.md', 'https://raw.githubusercontent.com/coreyhulse/pinball_tournament_machine_notes/refs/heads/main/machines/Beatles_cn_1463_G0l8P.md', true, true, '2018-11-20T18:06:36.000000Z', '2026-09-05T06:30:26.000000Z', 'machine'),
+    ('G0l2e', 'G0l2e', null, 'Trade Winds', null, null, 'Trade Winds', 1948, '1948-01-01', null, null, null, null, false, null, null, null, null, null, null, null, null, false, false, '2024-06-25T02:07:10.000000Z', '2026-09-05T06:30:26.000000Z','machineGroup'),
+    ('GWyBj', 'GWyBj', null, 'Harry Potter', null, null, 'Harry Potter', 2025, '2025-01-01', null, null, null, null, false, null, null, null, 'https://pinballrulesheets.com/jersey-jack/harry-potter-rulesheet', 'https://pinballcards.net/harry-potter-2025', null, null, null, false, true, '2025-06-05T21:20:56.000000Z', '2026-09-05T06:30:27.000000Z', 'machineGroup'),
+    ('GWyBj-MdEbK', 'GWyBj', 'GWyBj-MdEbK', 'Harry Potter', 'HP', null, 'Harry Potter', 2025, '2025-06-05', null, 'ss', 'lcd', 4, false, 74, null, null, 'https://pinballrulesheets.com/jersey-jack/harry-potter-rulesheet', 'https://pinballcards.net/harry-potter-2025', null, null, null, false, true, '2025-06-05T21:20:56.000000Z', '2026-09-05T06:30:27.000000Z', 'machine'),
+    ('GWyBj-MdEbK-A973V', 'GWyBj', 'GWyBj-MdEbK', 'Harry Potter (Wizard)', 'HP', null, 'Harry Potter (Wizard)', 2025, '2025-06-05', null, 'ss', 'lcd', 4, true, 74, null, null, 'https://pinballrulesheets.com/jersey-jack/harry-potter-rulesheet', 'https://pinballcards.net/harry-potter-2025', null, null, null, false, true, '2025-06-05T21:20:56.000000Z', '2026-09-05T06:30:27.000000Z', 'alias'),
+    ('GWyBj-MdEbK-A9dEy', 'GWyBj', 'GWyBj-MdEbK', 'Harry Potter (Arcade)', 'HP', null, 'Harry Potter (Arcade)', 2025, '2025-06-05', null, 'ss', 'lcd', 4, true, 74, null, null, 'https://pinballrulesheets.com/jersey-jack/harry-potter-rulesheet', 'https://pinballcards.net/harry-potter-2025', null, null, null, false, true, '2025-06-05T21:20:56.000000Z', '2026-09-05T06:30:27.000000Z', 'alias'),
+    ('GWyBj-MdEbK-AOPdq', 'GWyBj', 'GWyBj-MdEbK', 'Harry Potter (CE)', 'HP', null, 'Harry Potter (CE)', 2025, '2025-06-05', null, 'ss', 'lcd', 4, true, 74, null, null, 'https://pinballrulesheets.com/jersey-jack/harry-potter-rulesheet', 'https://pinballcards.net/harry-potter-2025', null, null,  null, false, true, '2025-06-05T21:20:56.000000Z', '2026-09-05T06:30:27.000000Z', 'alias'),
+    ('G4dOQ-MkPxr', 'G4dOQ', 'G4dOQ-MkPxr', 'Iron Maiden: Legacy of the Beast (Premium)', 'LotB', null, 'Iron Maiden: Legacy of the Beast (Premium)', 2018, '2018-04-01', '', 'ss', 'lcd', 4, true, 12, 6556, null, 'https://pinballrulesheets.com/stern/iron-maiden-pinball-rulesheet', 'https://pinballcards.net/iron-maiden-legacy-of-the-beast-2018', null, null, null, false, false, '2018-03-28T14:42:50.000000Z', '2026-09-05T06:30:27.000000Z', 'machine');
+
+INSERT INTO opdb_people (opdb_id, opdb_person_id, role_name, person_index) VALUES
+    ('G0l8P-M85d9', 137, 'design', 0),
+    ('G0l8P-M85d9', 139, 'mechanics', 2),
+    ('G0l8P-M85d9', 282, 'software', 3),
+    ('G0l8P-M85d9', 374, 'sound', 4),
+    ('G0l8P-M85d9', 393, 'art', 1),
+    ('G0l8P-M85d9', 444, 'dots_animation', 5),
+    ('G0l8P-M85d9', 445, 'music', 6),
+    ('GWyBj-MdEbK', 141, 'software', 10),
+    ('GWyBj-MdEbK', 204, 'software', 3),
+    ('GWyBj-MdEbK', 317, 'software', 9),
+    ('GWyBj-MdEbK', 344, 'dots_animation', 5),
+    ('GWyBj-MdEbK', 370, 'software', 8),
+    ('GWyBj-MdEbK', 372, 'design', 0),
+    ('GWyBj-MdEbK', 490, 'mechanics', 1),
+    ('GWyBj-MdEbK', 491, 'software', 11),
+    ('GWyBj-MdEbK', 492, 'software', 12),
+    ('GWyBj-MdEbK', 493, 'mechanics', 2),
+    ('GWyBj-MdEbK', 494, 'sound', 4),
+    ('GWyBj-MdEbK', 495, 'dots_animation', 6),
+    ('GWyBj-MdEbK', 496, 'dots_animation', 7),
+    ('GWyBj-MdEbK-A973V', 141, 'software', 10),
+    ('GWyBj-MdEbK-A973V', 204, 'software', 3),
+    ('GWyBj-MdEbK-A973V', 317, 'software', 9),
+    ('GWyBj-MdEbK-A973V', 344, 'dots_animation', 5),
+    ('GWyBj-MdEbK-A973V', 370, 'software', 8),
+    ('GWyBj-MdEbK-A973V', 372, 'design', 0),
+    ('GWyBj-MdEbK-A973V', 490, 'mechanics', 1),
+    ('GWyBj-MdEbK-A973V', 491, 'software', 11),
+    ('GWyBj-MdEbK-A973V', 492, 'software', 12),
+    ('GWyBj-MdEbK-A973V', 493, 'mechanics', 2),
+    ('GWyBj-MdEbK-A973V', 494, 'sound', 4),
+    ('GWyBj-MdEbK-A973V', 495, 'dots_animation', 6),
+    ('GWyBj-MdEbK-A973V', 496, 'dots_animation', 7),
+    ('GWyBj-MdEbK-A9dEy', 141, 'software', 10),
+    ('GWyBj-MdEbK-A9dEy', 204, 'software', 3),
+    ('GWyBj-MdEbK-A9dEy', 317, 'software', 9),
+    ('GWyBj-MdEbK-A9dEy', 344, 'dots_animation', 5),
+    ('GWyBj-MdEbK-A9dEy', 370, 'software', 8),
+    ('GWyBj-MdEbK-A9dEy', 372, 'design', 0),
+    ('GWyBj-MdEbK-A9dEy', 490, 'mechanics', 1),
+    ('GWyBj-MdEbK-A9dEy', 491, 'software', 11),
+    ('GWyBj-MdEbK-A9dEy', 492, 'software', 12),
+    ('GWyBj-MdEbK-A9dEy', 493, 'mechanics', 2),
+    ('GWyBj-MdEbK-A9dEy', 494, 'sound', 4),
+    ('GWyBj-MdEbK-A9dEy', 495, 'dots_animation', 6),
+    ('GWyBj-MdEbK-A9dEy', 496, 'dots_animation', 7),
+    ('GWyBj-MdEbK-AOPdq', 141, 'software', 5),
+    ('GWyBj-MdEbK-AOPdq', 204, 'software', 1),
+    ('GWyBj-MdEbK-AOPdq', 317, 'software', 4),
+    ('GWyBj-MdEbK-AOPdq', 344, 'dots_animation', 10),
+    ('GWyBj-MdEbK-AOPdq', 370, 'software', 2),
+    ('GWyBj-MdEbK-AOPdq', 372, 'design', 0),
+    ('GWyBj-MdEbK-AOPdq', 490, 'mechanics', 3),
+    ('GWyBj-MdEbK-AOPdq', 491, 'software', 6),
+    ('GWyBj-MdEbK-AOPdq', 492, 'software', 7),
+    ('GWyBj-MdEbK-AOPdq', 493, 'mechanics', 8),
+    ('GWyBj-MdEbK-AOPdq', 494, 'sound', 9),
+    ('GWyBj-MdEbK-AOPdq', 495, 'dots_animation', 11),
+    ('GWyBj-MdEbK-AOPdq', 496, 'dots_animation', 12),
+    ('G4dOQ-MkPxr', 365, 'dots_animation', 5),
+    ('G4dOQ-MkPxr', 374, 'music', 7),
+    ('G4dOQ-MkPxr', 374, 'sound', 4),
+    ('G4dOQ-MkPxr', 386, 'art', 1),
+    ('G4dOQ-MkPxr', 431, 'design', 0),
+    ('G4dOQ-MkPxr', 432, 'mechanics', 2),
+    ('G4dOQ-MkPxr', 433, 'software', 3),
+    ('G4dOQ-MkPxr', 434, 'music', 6);
+
+INSERT INTO opdb_images (opdb_id, group_id) VALUES
+    ('G0l8P-M85d9', 'd71148a2-23cf-4460-bf04-2e00a14b3e63'),
+    ('G0l8P-M85d9', '489b9d99-7ee9-46d4-ab71-784202206c74'),
+    ('GWyBj-MdEbK-A973V', 'e03b8851-4cb2-4614-b41f-a0698eaad3bb'),
+    ('GWyBj-MdEbK-A9dEy', 'f6ddfff7-07b1-4914-989c-233c583f08e3'),
+    ('GWyBj-MdEbK-A9dEy', 'a6b3c681-ef0d-4d14-91d4-6acfdd32d8e5'),
+    ('GWyBj-MdEbK-A9dEy', '9889cd2f-d390-41c7-a9ed-f13bd193a503'),
+    ('GWyBj-MdEbK-AOPdq', 'b0933b67-3189-42fc-9ceb-13a69f45a3b4'),
+    ('GWyBj-MdEbK-AOPdq', '1d47935c-a231-4f43-910f-7951e147dcac'),
+    ('GWyBj-MdEbK-AOPdq', '419d4600-a6bf-43c8-9e5a-d245ef0355ca'),
+    ('G4dOQ-MkPxr', '88402c82-c875-4a7a-bc54-5087fa577ab6'),
+    ('G4dOQ-MkPxr', 'e4c02a1b-b49c-4370-88e1-c94ab0774dec');
+
+INSERT INTO opdb_features (opdb_id, feature_id) VALUES
+    ('G0l8P-M85d9', 4),
+    ('GWyBj-MdEbK', 4),
+    ('GWyBj-MdEbK', 5),
+    ('GWyBj-MdEbK-A973V', 5),
+    ('GWyBj-MdEbK-A9dEy', 4),
+    ('GWyBj-MdEbK-AOPdq', 5),
+    ('G4dOQ-MkPxr', 5);
+
+-- Resync sequences so future auto-generated inserts don't collide
+SELECT setval(pg_get_serial_sequence('manufacturers', 'manufacturer_id'),
+    (SELECT COALESCE(MAX(manufacturer_id), 1) FROM manufacturers));
+
+SELECT setval(pg_get_serial_sequence('people', 'opdb_person_id'),
+    (SELECT COALESCE(MAX(opdb_person_id), 1) FROM people));
+
+SELECT setval(pg_get_serial_sequence('features', 'feature_id'),
+    (SELECT COALESCE(MAX(feature_id), 1) FROM features));
+
+COMMIT;
