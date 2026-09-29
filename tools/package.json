@@ -1,0 +1,12 @@
+{
+  "name": "opdb-tooling",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "validate": "ajv validate -s ../opdb-v2-schema.json -c ajv-formats --all-errors -d"
+  },
+  "devDependencies": {
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^3.0.1"
+  }
+}
