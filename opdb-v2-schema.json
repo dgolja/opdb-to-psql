@@ -1,0 +1,238 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://docs.matchplay.events/data-exports/opdb-v2.json",
+  "$comment": "Unofficial schema based on the data provided. The $id is only an identifier and is not published by Matchplay.",
+  "title": "OPDB V2 Export",
+  "type": "object",
+  "properties": {
+    "entries": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/opdbEntry" }
+    }
+  },
+  "required": ["entries"],
+  "additionalProperties": false,
+
+  "definitions": {
+    "opdbEntry": {
+      "type": "object",
+      "properties": {
+        "opdbId": {
+          "type": "string",
+          "pattern": "^G[A-Za-z0-9]{4}(-M[A-Za-z0-9]{4})?(-A[A-Za-z0-9]{4})?$"
+        },
+        "opdbGroup": {
+          "type": "string",
+          "pattern": "^G[A-Za-z0-9]{4}$"
+        },
+        "opdbMachine": {
+          "type": ["string", "null"],
+          "pattern": "^G[A-Za-z0-9]{4}-M[A-Za-z0-9]{4}$"
+        },
+        "name": { "type": "string" },
+        "shortName": { "type": ["string", "null"] },
+        "commonName": { "type": ["string", "null"] },
+        "nameSort": { "type": "string" },
+        "year": {
+          "type": "integer",
+          "minimum": 1900,
+          "maximum": 2100
+        },
+        "manufactureDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "description": {
+          "type": ["string", "null"],
+          "description": "Can be null, an empty string, or actual text."
+        },
+        "type": {
+          "type": ["string", "null"],
+          "enum": ["em", "ss", "me", null],
+          "description": "em = electromechanical, ss = solid state, me = mechanical."
+        },
+        "display": {
+          "type": ["string", "null"],
+          "enum": ["reels", "alphanumeric", "lcd", "lights", "dmd", "cga", null]
+        },
+        "playerCount": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 10
+        },
+        "physicalMachine": { "type": "boolean" },
+        "manufacturerId": { "type": ["integer", "null"], "minimum": 1 },
+        "ipdbId": { "type": ["integer", "null"], "minimum": 1 },
+        "pinballPrimerUrl": { "$ref": "#/definitions/nullableUrl" },
+        "pinballRulesUrl": { "$ref": "#/definitions/nullableUrl" },
+        "pinballCardsUrl": { "$ref": "#/definitions/nullableUrl" },
+        "bobsGuideUrl": { "$ref": "#/definitions/nullableUrl" },
+        "competitionSetupUrl": { "$ref": "#/definitions/nullableUrl" },
+        "competitionNotesUrl": { "$ref": "#/definitions/nullableUrl" },
+        "hasCompetitionNotes": { "type": "boolean" },
+        "hasCompetitionSetup": { "type": "boolean" },
+        "createdAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}Z$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}Z$"
+        },
+        "entryType": {
+          "type": "string",
+          "enum": ["machine", "machineGroup", "alias"]
+        },
+        "manufacturer": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/manufacturer" }
+          ]
+        },
+        "people": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/person" }
+        },
+        "images": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/image" }
+        },
+        "features": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/feature" }
+        },
+        "keywords": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": [
+        "opdbId", "opdbGroup", "opdbMachine", "name", "shortName", "commonName",
+        "nameSort", "year", "manufactureDate", "description", "type", "display",
+        "playerCount", "physicalMachine", "manufacturerId", "ipdbId",
+        "pinballPrimerUrl", "pinballRulesUrl", "pinballCardsUrl", "bobsGuideUrl",
+        "competitionSetupUrl", "competitionNotesUrl", "hasCompetitionNotes",
+        "hasCompetitionSetup", "createdAt", "updatedAt", "entryType",
+        "manufacturer", "people", "images", "features", "keywords"
+      ],
+      "additionalProperties": false,
+
+      "allOf": [
+        {
+          "$comment": "opdbMachine must be present (non-null) whenever entryType is 'machine' or 'alias'; null only for 'machineGroup'.",
+          "if": { "properties": { "entryType": { "const": "machineGroup" } } },
+          "then": { "properties": { "opdbMachine": { "const": null } } },
+          "else": { "properties": { "opdbMachine": { "type": "string" } } }
+        },
+        {
+          "$comment": "manufacturer/manufacturerId are null together for machineGroup entries, populated otherwise (based on observed data).",
+          "if": { "properties": { "entryType": { "const": "machineGroup" } } },
+          "then": {
+            "properties": {
+              "manufacturer": { "type": "null" },
+              "manufacturerId": { "type": "null" }
+            }
+          }
+        }
+      ]
+    },
+
+    "nullableUrl": {
+      "type": ["string", "null"],
+      "pattern": "^https?://"
+    },
+
+    "manufacturer": {
+      "type": "object",
+      "properties": {
+        "manufacturerId": { "type": "integer", "minimum": 1 },
+        "name": { "type": "string" },
+        "fullName": { "type": "string" }
+      },
+      "required": ["manufacturerId", "name", "fullName"],
+      "additionalProperties": false
+    },
+
+    "person": {
+      "type": "object",
+      "properties": {
+        "opdbPersonId": { "type": "integer", "minimum": 1 },
+        "name": { "type": "string" },
+        "role": {
+          "type": "string",
+          "enum": ["art", "design", "software", "dots_animation", "sound", "mechanics", "music"]
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Ordering position of this person within their role."
+        }
+      },
+      "required": ["opdbPersonId", "name", "role", "index"],
+      "additionalProperties": false
+    },
+
+    "image": {
+      "type": "object",
+      "properties": {
+        "group": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "title": { "type": ["string", "null"] },
+        "primary": { "type": "boolean" },
+        "type": {
+          "type": "string",
+          "enum": ["backglass", "playfield", "cabinet", "closeup", "other"]
+        },
+        "urls": { "$ref": "#/definitions/imageUrls" },
+        "sizes": { "$ref": "#/definitions/imageSizes" }
+      },
+      "required": ["group", "title", "primary", "type", "urls", "sizes"],
+      "additionalProperties": false
+    },
+
+    "imageUrls": {
+      "type": "object",
+      "properties": {
+        "small": { "type": "string", "format": "uri" },
+        "medium": { "type": "string", "format": "uri" },
+        "large": { "type": "string", "format": "uri" }
+      },
+      "required": ["small", "medium", "large"],
+      "additionalProperties": false
+    },
+
+    "imageSizes": {
+      "type": "object",
+      "properties": {
+        "small": { "$ref": "#/definitions/dimensions" },
+        "medium": { "$ref": "#/definitions/dimensions" },
+        "large": { "$ref": "#/definitions/dimensions" }
+      },
+      "required": ["small", "medium", "large"],
+      "additionalProperties": false
+    },
+
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["width", "height"],
+      "additionalProperties": false
+    },
+
+    "feature": {
+      "type": "object",
+      "properties": {
+        "featureId": { "type": "integer", "minimum": 1 },
+        "group": { "type": "string" },
+        "name": { "type": "string" }
+      },
+      "required": ["featureId", "group", "name"],
+      "additionalProperties": false
+    }
+  }
+}
