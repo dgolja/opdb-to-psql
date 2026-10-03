@@ -32,7 +32,7 @@ run into rate limits and IP bans. Keeping a local copy avoids those problems.
 
 ## Repository layout
 
-- **[`supabase/`](supabase/)** — Supabase project: SQL migrations defining the schema
+- **[`supabase/`](supabase/)** — Supabase project: SQL migrations defining the schema,  plus a view/RPC layer (`opdb_export`, `opdb_entries()`, `opdb_entry()`) that reassembles the normalized tables back into the original OPDB JSON structure, which can be exposed over PostgREST.
 - **[`tools/opdb-importer/`](tools/opdb-importer/)** — a Go CLI (`opdb-importer`) with two subcommands:
   - `import` — reads an OPDB JSON export and loads it into the Postgres tables.
   - `export` — reads the tables back out and writes an OPDB-shaped JSON file (useful for
@@ -171,9 +171,11 @@ jd -opts='[{"@":[],"^":[{"setkeys":["opdbId"]}]},{"@":[{},"updatedAt"],"^":["DIF
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the development setup and how to run the unit and
 integration tests.
 
-## Stability
+## Backwards compatibility
 
 Until the code is stabilised I may add breaking changes, but I will avoid them where possible.
+
+The OPDB JSON export is produced by its own author, not by this project. If the export format changes in a breaking way, this project will have to be adjusted to follow it, which may in turn require breaking changes here.
 
 ## License
 
