@@ -176,7 +176,3 @@ integration tests.
 Until the code is stabilised I may add breaking changes, but I will avoid them where possible.
 
 The OPDB JSON export is produced by its own author, not by this project. If the export format changes in a breaking way, this project will have to be adjusted to follow it, which may in turn require breaking changes here.
-
-## License
-
-opdb-to-psql is released under the MIT license.
