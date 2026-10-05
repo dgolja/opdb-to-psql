@@ -34,10 +34,10 @@ func (d *Date) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON writes back out as "YYYY-MM-DD", or null when zero.
 func (d Date) MarshalJSON() ([]byte, error) {
-	if d.Time.IsZero() {
+	if d.IsZero() {
 		return []byte("null"), nil
 	}
-	return json.Marshal(d.Time.Format(dateLayout))
+	return json.Marshal(d.Format(dateLayout))
 }
 
 // Scan implements database/sql.Scanner, which pgx v5 uses as a fallback
@@ -57,7 +57,7 @@ func (d *Date) Scan(value interface{}) error {
 // Value implements database/sql/driver.Valuer, for the reverse direction
 // (inserting a Date value back into Postgres).
 func (d Date) Value() (driver.Value, error) {
-	if d.Time.IsZero() {
+	if d.IsZero() {
 		return nil, nil
 	}
 	return d.Time, nil
@@ -90,7 +90,7 @@ func (d *Timestamp) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON writes back out as a UTC "2006-01-02T15:04:05.000000Z" string, or null when zero.
 func (d Timestamp) MarshalJSON() ([]byte, error) {
-	if d.Time.IsZero() {
+	if d.IsZero() {
 		return []byte("null"), nil
 	}
 	return json.Marshal(d.Time.UTC().Format(timestampLayout))
@@ -113,7 +113,7 @@ func (d *Timestamp) Scan(value interface{}) error {
 // Value implements database/sql/driver.Valuer, for the reverse direction
 // (inserting a Timestamp value back into Postgres).
 func (d Timestamp) Value() (driver.Value, error) {
-	if d.Time.IsZero() {
+	if d.IsZero() {
 		return nil, nil
 	}
 	return d.Time, nil

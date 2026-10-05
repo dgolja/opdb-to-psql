@@ -50,7 +50,7 @@ func runImport(ctx context.Context, log *slog.Logger, path, dbURL string, trunca
 	}
 	dbData.WithLogger(log)
 
-	defer dbData.Close(context.Background())
+	defer dbData.CloseGracefully(ctx)
 
 	log.InfoContext(ctx, "importing", "file", path, "entries", len(data.Entries))
 

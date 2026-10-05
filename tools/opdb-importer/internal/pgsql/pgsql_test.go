@@ -341,3 +341,50 @@ func TestWithLoggerTwiceReplacesLogger(t *testing.T) {
 		t.Errorf("statement should be logged exactly once, got %d:\n%s", got, second.String())
 	}
 }
+
+// closeSpy records the state of the context Close was called with.
+type closeSpy struct {
+	DB
+	called      bool
+	errAtCall   error
+	hasDeadline bool
+	err         error
+}
+
+func (c *closeSpy) Close(ctx context.Context) error {
+	c.called = true
+	c.errAtCall = ctx.Err()
+	_, c.hasDeadline = ctx.Deadline()
+	return c.err
+}
+
+func TestCloseGracefully(t *testing.T) {
+	t.Run("close context is live and bounded when the parent is cancelled", func(t *testing.T) {
+		cancelled, cancel := context.WithCancel(context.Background())
+		cancel()
+
+		spy := &closeSpy{}
+		NewWithDB(spy, &opdbv2.Export{}).CloseGracefully(cancelled)
+
+		if !spy.called {
+			t.Fatal("Close was not called")
+		}
+		if spy.errAtCall != nil {
+			t.Errorf("Close ctx already done: %v", spy.errAtCall)
+		}
+		if !spy.hasDeadline {
+			t.Error("Close ctx has no deadline")
+		}
+	})
+
+	t.Run("logs close error instead of returning it", func(t *testing.T) {
+		var buf bytes.Buffer
+		log := slog.New(slog.NewTextHandler(&buf, nil))
+		spy := &closeSpy{err: errors.New("boom")}
+		NewWithDB(spy, &opdbv2.Export{}).WithLogger(log).CloseGracefully(context.Background())
+
+		if !strings.Contains(buf.String(), "boom") {
+			t.Errorf("close error not logged: %q", buf.String())
+		}
+	})
+}

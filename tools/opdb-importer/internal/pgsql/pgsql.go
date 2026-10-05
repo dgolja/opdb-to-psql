@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"strings"
+	"time"
 
 	"github.com/dgolja/opdb-to-psql/tools/opdb-importer/internal/opdbv2"
 	"github.com/jackc/pgx/v5"
@@ -21,6 +22,9 @@ const (
 	tableOPDBFeatures  = "opdb_features"
 	tableOPDBImages    = "opdb_images"
 )
+
+// closeTimeout bounds CloseGracefully so an unreachable server cannot block exit.
+const closeTimeout = 5 * time.Second
 
 // allTables lists every table the importer manages, in the same order as the
 // TRUNCATE in supabase/seed.sql.
@@ -88,4 +92,15 @@ func truncateTables(ctx context.Context, tx pgx.Tx) error {
 // Close releases the database connection.
 func (i OPDBv2) Close(ctx context.Context) error {
 	return i.conn.Close(ctx)
+}
+
+// CloseGracefully closes the connection even when ctx is already cancelled
+// (e.g. Ctrl-C), so it is shut down cleanly, bounded by a timeout. A close
+// error is logged, not returned, so it is safe to defer.
+func (i *OPDBv2) CloseGracefully(ctx context.Context) {
+	ctx, cancel := context.WithTimeout(context.WithoutCancel(ctx), closeTimeout)
+	defer cancel()
+	if err := i.Close(ctx); err != nil {
+		i.log.WarnContext(ctx, "closing database connection", "error", err)
+	}
 }

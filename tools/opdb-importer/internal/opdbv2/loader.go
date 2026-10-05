@@ -13,7 +13,7 @@ func LoadFromFile(path string) (*Export, error) {
 	if err != nil {
 		return nil, fmt.Errorf("opening file: %w", err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	return LoadFromReader(f)
 }

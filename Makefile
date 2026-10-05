@@ -9,6 +9,8 @@ DATA_FILE ?= $(lastword $(sort $(wildcard $(DATA_DIR)/opdb-v2.*.json)))
 ## Additional tooling needed for Makefile to work
 TOOLS_BIN := $(CURDIR)/.bin
 GOVULNCHECK_VERSION := v1.1.4
+# Also read by .github/workflows/ci.yaml for golangci/golangci-lint-action
+GOLANGCI_LINT_VERSION := v2.14.0
 
 export PATH:=$(TOOLS_BIN):$(PATH)
 
@@ -22,11 +24,15 @@ help: ## Show this help
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: install-tools
-install-tools: $(TOOLS_BIN)/govulncheck $(NODE_DIR)/node_modules ## Install all required tools
+install-tools: $(TOOLS_BIN)/govulncheck $(TOOLS_BIN)/golangci-lint $(NODE_DIR)/node_modules ## Install all required tools
 
 $(TOOLS_BIN)/govulncheck: ## install govulncheck
 	@mkdir -p $(TOOLS_BIN)
 	GOBIN=$(TOOLS_BIN) go install golang.org/x/vuln/cmd/govulncheck@$(GOVULNCHECK_VERSION)
+
+$(TOOLS_BIN)/golangci-lint: ## install golangci-lint (binary install, as recommended upstream)
+	@mkdir -p $(TOOLS_BIN)
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/$(GOLANGCI_LINT_VERSION)/install.sh | sh -s -- -b $(TOOLS_BIN) $(GOLANGCI_LINT_VERSION)
 
 $(NODE_DIR)/node_modules: $(NODE_DIR)/package.json $(NODE_DIR)/package-lock.json ## install ajv-cli (JSON schema validation)
 	cd $(NODE_DIR) && npm ci
@@ -64,6 +70,13 @@ vet: ## Run go vet
 fmt: ## Check if Go files are formatted
 	@test -z "$$(gofmt -s -l $(GO_DIR))" || (echo "Code is not formatted. Run 'gofmt -s -w $(GO_DIR)'"; exit 1)
 
+.PHONY: lint
+lint: fmt vet golangci-lint ## Run all static checks (fmt, vet, golangci-lint), same as CI
+
+.PHONY: golangci-lint
+golangci-lint: $(TOOLS_BIN)/golangci-lint ## Run golangci-lint only (CI uses golangci-lint-action with the same version)
+	cd $(GO_DIR) && $(TOOLS_BIN)/golangci-lint run ./...
+
 .PHONY: vulncheck
 vulncheck: $(TOOLS_BIN)/govulncheck ## Scan dependencies and stdlib for known vulnerabilities
 	cd $(GO_DIR) && $(TOOLS_BIN)/govulncheck ./...
@@ -71,3 +84,7 @@ vulncheck: $(TOOLS_BIN)/govulncheck ## Scan dependencies and stdlib for known vu
 .PHONY: clean
 clean: ## Remove the .bin directory
 	rm -rf $(TOOLS_BIN)
+
+.PHONY: print-golangci-lint-version
+print-golangci-lint-version: # used by CI to pin golangci-lint-action to the same version
+	@echo $(GOLANGCI_LINT_VERSION)

@@ -42,7 +42,7 @@ func runExport(ctx context.Context, log *slog.Logger, path, dbURL string) error 
 		return err
 	}
 	dbData.WithLogger(log)
-	defer dbData.Close(context.Background())
+	defer dbData.CloseGracefully(ctx)
 
 	if err := dbData.LoadFromDB(ctx); err != nil {
 		return err

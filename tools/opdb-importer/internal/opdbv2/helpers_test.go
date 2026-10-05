@@ -11,7 +11,7 @@ func TestDateJSONRoundTrip(t *testing.T) {
 	if err := json.Unmarshal([]byte(`"1978-03-15"`), &d); err != nil {
 		t.Fatal(err)
 	}
-	if want := time.Date(1978, 3, 15, 0, 0, 0, 0, time.UTC); !d.Time.Equal(want) {
+	if want := time.Date(1978, 3, 15, 0, 0, 0, 0, time.UTC); !d.Equal(want) {
 		t.Fatalf("got %v, want %v", d.Time, want)
 	}
 	out, err := json.Marshal(d)
@@ -25,7 +25,7 @@ func TestDateJSONRoundTrip(t *testing.T) {
 
 func TestDateEmptyAndInvalid(t *testing.T) {
 	var d Date
-	if err := json.Unmarshal([]byte(`""`), &d); err != nil || !d.Time.IsZero() {
+	if err := json.Unmarshal([]byte(`""`), &d); err != nil || !d.IsZero() {
 		t.Fatalf("empty string should leave zero value, got %v, %v", d.Time, err)
 	}
 	if err := json.Unmarshal([]byte(`"15/03/1978"`), &d); err == nil {
@@ -63,7 +63,7 @@ func TestScanAndValue(t *testing.T) {
 	now := time.Now()
 
 	var d Date
-	if err := d.Scan(now); err != nil || !d.Time.Equal(now) {
+	if err := d.Scan(now); err != nil || !d.Equal(now) {
 		t.Fatalf("Date.Scan: %v, %v", d.Time, err)
 	}
 	if err := d.Scan("nope"); err == nil {
@@ -74,7 +74,7 @@ func TestScanAndValue(t *testing.T) {
 	}
 
 	var ts Timestamp
-	if err := ts.Scan(now); err != nil || !ts.Time.Equal(now) {
+	if err := ts.Scan(now); err != nil || !ts.Equal(now) {
 		t.Fatalf("Timestamp.Scan: %v, %v", ts.Time, err)
 	}
 	if err := ts.Scan(42); err == nil {

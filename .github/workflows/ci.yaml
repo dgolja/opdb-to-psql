@@ -30,6 +30,28 @@ jobs:
       if: ${{ !cancelled() }}
       run: make vet
 
+  golangci-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version-file: tools/opdb-importer/go.mod
+        cache-dependency-path: tools/opdb-importer/go.sum
+
+    # Single source of truth for the version is the Makefile
+    - name: Read golangci-lint version
+      id: version
+      run: echo "version=$(make -s print-golangci-lint-version)" >> "$GITHUB_OUTPUT"
+
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v9
+      with:
+        version: ${{ steps.version.outputs.version }}
+        working-directory: tools/opdb-importer
+
   test:
     runs-on: ubuntu-latest
     steps:
