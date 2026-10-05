@@ -62,7 +62,7 @@ vet: ## Run go vet
 
 .PHONY: fmt
 fmt: ## Check if Go files are formatted
-	@test -z "$$(gofmt -l $(GO_DIR))" || (echo "Code is not formatted. Run 'gofmt -s -w $(GO_DIR)'"; exit 1)
+	@test -z "$$(gofmt -s -l $(GO_DIR))" || (echo "Code is not formatted. Run 'gofmt -s -w $(GO_DIR)'"; exit 1)
 
 .PHONY: vulncheck
 vulncheck: $(TOOLS_BIN)/govulncheck ## Scan dependencies and stdlib for known vulnerabilities

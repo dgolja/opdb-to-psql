@@ -1,0 +1,28 @@
+# This workflow validates the latest upstream OPDB export against our JSON schema once a week
+name: Validate Schema
+
+on:
+  schedule:
+    # Mondays at 07:00 UTC
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Set up Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: lts/*
+        cache: npm
+        cache-dependency-path: tools/package-lock.json
+
+    - name: Download and validate
+      run: make download validate

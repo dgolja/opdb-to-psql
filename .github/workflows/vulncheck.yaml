@@ -1,0 +1,27 @@
+# This workflow scans the golang project for known vulnerabilities once a week
+name: Vulncheck
+
+on:
+  schedule:
+    # Mondays at 06:00 UTC
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+
+  vulncheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version-file: tools/opdb-importer/go.mod
+        cache-dependency-path: tools/opdb-importer/go.sum
+
+    - name: Vulncheck
+      run: make vulncheck
