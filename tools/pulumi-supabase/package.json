@@ -1,0 +1,15 @@
+{
+    "name": "opdb-to-psql",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/node": "^18",
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "@pulumi/pulumi": "^3.113.0",
+        "@pulumi/supabase": "file:sdks/supabase"
+    },
+    "allowScripts": {
+        "file:sdks/supabase": true
+    }
+}

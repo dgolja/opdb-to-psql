@@ -1,0 +1,25 @@
+name: opdb-to-psql
+description: A minimal TypeScript Pulumi program to define a supabase project for opdb-to-psql
+runtime:
+  name: nodejs
+  options:
+    packagemanager: npm
+config:
+  projectName:
+    type: string
+    description: Name of the Supabase project
+  orgId:
+    type: string
+    description: Organization slug (Supabase Dashboard > Organization Settings > Organization Details > Organization slug)
+  region:
+    type: string
+    default: ap-southeast-2
+  pulumi:tags:
+    value:
+      pulumi:template: typescript
+packages:
+  supabase:
+    source: terraform-provider
+    version: 1.4.0
+    parameters:
+      - supabase/supabase

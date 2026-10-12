@@ -1,0 +1,10 @@
+config:
+  opdb-to-psql:projectName: opdb-to-psql
+  # Organization slug (Supabase Dashboard > Organization Settings > Organization slug)
+  opdb-to-psql:orgId: skrXXXXX
+  # opdb-to-psql:region: us-east-1
+  # Do not set `nano` explicitly (see README); omit for the free plan default.
+  # opdb-to-psql:instanceSize: micro
+  # Secrets are set via the CLI, not committed:
+  #   pulumi config set dbPassword --secret
+  #   pulumi config set supabase:accessToken --secret
