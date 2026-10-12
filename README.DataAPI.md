@@ -43,6 +43,9 @@ supabase migration up
 
 Create a project in the [Supabase dashboard](https://supabase.com/dashboard), then log in and link it. The project ref is the `<PROJECT_ID>` part of `https://<PROJECT_ID>.supabase.co`.
 
+> [!TIP]
+> Instead of creating the project by hand in the dashboard, you can use the Pulumi tool in [`tools/pulumi-supabase`](tools/pulumi-supabase/README.md) to create the Supabase project as code.
+
 ```console
 supabase login
 supabase link --project-ref <PROJECT_ID>
