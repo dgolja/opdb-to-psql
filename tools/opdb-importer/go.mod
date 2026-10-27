@@ -1,6 +1,6 @@
 module github.com/dgolja/opdb-to-psql/tools/opdb-importer
 
-go 1.26.9
+go 1.26.10
 
 require (
 	github.com/google/go-cmp v0.6.0
